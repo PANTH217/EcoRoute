@@ -152,16 +152,7 @@ export async function askLorriAI(query, context) {
     }
 }
 
-// Initialize the Gemini API client using the environment variable
-let genAI = null;
-try {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    if (apiKey && apiKey !== 'YOUR_API_KEY_HERE') {
-        genAI = new GoogleGenerativeAI(apiKey);
-    }
-} catch (e) {
-    console.warn("Gemini API initialization skipped. Pending API Key.");
-}
+// Initialize through rotation on demand
 
 /**
  * Generate a dynamic Eco-Routing Executive Summary using the real Google Gemini API.
@@ -173,13 +164,19 @@ try {
  * @returns {Promise<string>} A professional analysis.
  */
 export async function generateRouteAnalysis(routes, vehicleType, payload, originName, destinationName) {
-    // Fallback: If no API key or invalid routes, use local logic.
-    if (!genAI || !routes || routes.length < 2) {
+    const key = getNextKey();
+
+    // Fallback if no valid key is available
+    if (!key || key.startsWith("REPLACE_WITH") || key.length < 10) {
         return fallbackSimulation(routes, vehicleType, payload, originName, destinationName);
     }
 
-    const bestEco = routes[0];
-    const fastest = [...routes].sort((a, b) => a.durationS - b.durationS)[0];
+    const bestEco = routes?.[0];
+    const fastest = [...(routes || [])].sort((a, b) => a.durationS - b.durationS)[0];
+
+    if (!bestEco || !fastest) {
+        return fallbackSimulation(routes, vehicleType, payload, originName, destinationName);
+    }
 
     // Build the data context for the LLM
     const dataContext = `
@@ -196,12 +193,13 @@ export async function generateRouteAnalysis(routes, vehicleType, payload, origin
     `;
 
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const genAI = new GoogleGenerativeAI(key);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
         const result = await model.generateContent(dataContext);
         const responseText = result.response.text().replace(/\*/g, ''); // Strip asterisks
         return responseText;
     } catch (error) {
-        console.error("Gemini API Request Failed:", error);
+        console.error("Gemini Route Analysis Failed:", error);
         return fallbackSimulation(routes, vehicleType, payload, originName, destinationName);
     }
 }
@@ -241,8 +239,9 @@ function fallbackSimulation(routes, vehicleType, payload, originName, destinatio
  * @returns {Promise<Object>} JSON object containing extracted route parameters.
  */
 export async function parseMagicDispatch(query) {
-    if (!genAI) {
-        throw new Error("Gemini API key is missing. Cannot perform Magic Dispatch.");
+    const key = getNextKey();
+    if (!key || key.startsWith("REPLACE_WITH") || key.length < 10) {
+        throw new Error("Gemini API key is missing or invalid. Rotation exhausted.");
     }
 
     const prompt = `
@@ -262,14 +261,15 @@ export async function parseMagicDispatch(query) {
     `;
 
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const genAI = new GoogleGenerativeAI(key);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
         const result = await model.generateContent(prompt);
         let text = result.response.text().trim();
 
-        // Robust JSON extraction using Regex to find the first `{` and last `}`
+        // Robust JSON extraction
         const jsonMatch = text.match(/\{[\s\S]*\}/);
         if (!jsonMatch) {
-            throw new Error("Lorri.AI did not return a valid data structure. Please try rephrasing.");
+            throw new Error("Lorri.AI did not return a valid data structure.");
         }
 
         return JSON.parse(jsonMatch[0]);
