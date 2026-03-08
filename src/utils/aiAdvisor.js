@@ -123,7 +123,7 @@ export async function askLorriAI(query, context) {
 
     try {
         const genAI = new GoogleGenerativeAI(key);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         const prompt = `
       You are Lorri.AI, a world-class logistics and sustainability advisor.
@@ -194,7 +194,7 @@ export async function generateRouteAnalysis(routes, vehicleType, payload, origin
 
     try {
         const genAI = new GoogleGenerativeAI(key);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
         const result = await model.generateContent(dataContext);
         const responseText = result.response.text().replace(/\*/g, ''); // Strip asterisks
         return responseText;
@@ -262,7 +262,7 @@ export async function parseMagicDispatch(query) {
 
     try {
         const genAI = new GoogleGenerativeAI(key);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
         const result = await model.generateContent(prompt);
         let text = result.response.text().trim();
 
