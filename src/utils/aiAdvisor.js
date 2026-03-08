@@ -7,10 +7,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // User to provide keys - currently using placeholders
 const API_KEYS = [
-    "AIzaSyDtn9z0AMGfEyLJckmxIvSWkbxh5UybURs",
-    "AIzaSyDDcJA2K_CZ119nnZX0aoNMxgKUxLItbqo",
-    "AIzaSyBQhSLz8JYKopd17NJl9vQ-d0y6uynQoPc",
-    "AIzaSyDGr7xEWWQ15-BJUX3mIZr-HT52YZRrOCw"
+    "AIzaSyA3NOVM7XNWtKSy8b0jW8fd5TE7pIfEKqk",
+    "AIzaSyC3hNmu8Nk50MVOcxy2Psj2rqrzTdZbub0",
+    "AIzaSyCuKOdLAN_-x1gDvFkjzAt4w26bCowGMLM",
+    "AIzaSyCHC1X1_hrPeUTmcuUDpvoEDDvgPcnk5jw"
 ];
 
 let currentKeyIndex = 0;
