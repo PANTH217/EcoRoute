@@ -306,28 +306,28 @@ export default function App() {
 
   return (
     <div className="app">
-      <aside className="sidebar">
-        <div className="nav-tabs">
-          <button
-            className={`nav-btn ${activeTab === 'map' ? 'active' : ''}`}
-            onClick={() => setActiveTab('map')}
-          >
-            📍 Optimizer
-          </button>
-          <button
-            className={`nav-btn ${activeTab === 'fleet' ? 'active' : ''}`}
-            onClick={() => setActiveTab('fleet')}
-          >
-            🚛 Fleet
-          </button>
-          <button
-            className={`nav-btn ${activeTab === 'analytics' ? 'active' : ''}`}
-            onClick={() => setActiveTab('analytics')}
-          >
-            📊 ESG Analytics
-          </button>
-        </div>
+      <div className="nav-tabs">
+        <button
+          className={`nav-btn ${activeTab === 'map' ? 'active' : ''}`}
+          onClick={() => setActiveTab('map')}
+        >
+          📍 Optimizer
+        </button>
+        <button
+          className={`nav-btn ${activeTab === 'fleet' ? 'active' : ''}`}
+          onClick={() => setActiveTab('fleet')}
+        >
+          🚛 Fleet
+        </button>
+        <button
+          className={`nav-btn ${activeTab === 'analytics' ? 'active' : ''}`}
+          onClick={() => setActiveTab('analytics')}
+        >
+          📊 ESG Analytics
+        </button>
+      </div>
 
+      <aside className="sidebar">
         <SearchPanel
           onSearch={handleSearch}
           loading={loading}
