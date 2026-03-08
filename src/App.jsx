@@ -21,8 +21,6 @@ import GenAIExplainer from './components/GenAIExplainer';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
 import FleetManager from './components/FleetManager';
 import { SAMPLE_FLEET, SAMPLE_TRIPS } from './utils/sampleData';
-import GlobalIntelligenceBar from './components/GlobalIntelligenceBar';
-import IntelligenceOverlay from './components/IntelligenceOverlay';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -474,7 +472,6 @@ export default function App() {
               origin={originPos}
               destination={destPos}
             />
-            <IntelligenceOverlay />
             <EcoMathCard />
           </>
         ) : activeTab === 'fleet' ? (
