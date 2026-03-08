@@ -7,8 +7,6 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // User to provide keys - currently using placeholders
 const API_KEYS = [
-    "AIzaSyBg-KA_BRgI4BYy2ZoxenHz-ffO2EdAN04",
-    "AIzaSyBLlSzni6G0OMRJmOgdeY7_C02abDDf2NI"
 ];
 
 let currentKeyIndex = 0;
