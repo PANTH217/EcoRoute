@@ -90,7 +90,7 @@ export default function Login({ onLoginComplete }) {
             <div className="login-content-wrapper animate-fade-in">
                 <div className="informative-panel">
                     <div className="status-pill animate-pulse">
-                        <span className="pulse-dot"></span> SYSTEM ONLINE: NEXUS CORE ACTIVE
+                        <span className="pulse-dot"></span> SYSTEM SECURE: ECO-INTELLIGENCE LIVE
                     </div>
 
                     <h2 className="hero-title">Decarbonizing <br /><span className="gradient-text">Global Logistics</span></h2>
