@@ -1,49 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { auth, googleProvider } from '../firebase';
 import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import './Login.css';
-import { SAMPLE_FLEET, SAMPLE_TRIPS } from '../utils/sampleData';
+
+const PROTOCOL_MESSAGES = [
+    "Initializing NEXUS Core orchestration...",
+    "Scanning Pune-Mumbai logistics corridor...",
+    "Analyzing fleet emissions (342.5kg CO2 detected)...",
+    "Optimizing payload for NEXUS-Alpha...",
+    "Strategic alignment: +18% fuel efficiency identified.",
+    "Lorri.AI: Recalibrating dynamic ESG layers...",
+    "Syncing with global carbon offset protocol...",
+    "System status: NEXUS CORE ACTIVE & STABLE."
+];
 
 export default function Login({ onLoginComplete }) {
     const [isRegistering, setIsRegistering] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [stats, setStats] = useState({
-        carbonSaved: 0,
-        efficiency: 0,
-        tripsCount: 0
-    });
+    const [logs, setLogs] = useState([]);
+    const [glowPos, setGlowPos] = useState({ x: 50, y: 50 });
+    const terminalRef = useRef(null);
 
     useEffect(() => {
-        try {
-            const savedTrips = localStorage.getItem('ecoroute_trips');
-            const savedFleet = localStorage.getItem('ecoroute_fleet');
-
-            const trips = (savedTrips && JSON.parse(savedTrips).length > 0) ? JSON.parse(savedTrips) : SAMPLE_TRIPS;
-            const fleet = savedFleet ? JSON.parse(savedFleet) : SAMPLE_FLEET;
-
-            if (trips) {
-                const totalSaved = trips.reduce((acc, t) => acc + (t.savingCo2 || 0), 0);
-                const fleetCount = fleet.length;
-
-                setStats({
-                    carbonSaved: totalSaved.toFixed(1),
-                    efficiency: trips.length > 0 ? 98.4 : 0,
-                    tripsCount: trips.length,
-                    fleetCount: fleetCount
-                });
-            }
-        } catch (err) {
-            console.error("Failed to load local stats:", err);
-            // Even on error, show samples
-            setStats({
-                carbonSaved: 512.4, // Generic total from sample
-                efficiency: 98.4,
-                tripsCount: 3
+        let index = 0;
+        const interval = setInterval(() => {
+            setLogs(prev => {
+                const newLogs = [...prev, PROTOCOL_MESSAGES[index]];
+                return newLogs.slice(-5); // Keep last 5 logs
             });
-        }
+            index = (index + 1) % PROTOCOL_MESSAGES.length;
+        }, 2000);
+        return () => clearInterval(interval);
     }, []);
+
+    const handleMouseMove = (e) => {
+        const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+        const x = ((e.clientX - left) / width) * 100;
+        const y = ((e.clientY - top) / height) * 100;
+        setGlowPos({ x, y });
+    };
 
     const handleGoogleSignIn = async () => {
         try {
@@ -82,7 +79,14 @@ export default function Login({ onLoginComplete }) {
     };
 
     return (
-        <div className="login-container">
+        <div
+            className="login-container"
+            onMouseMove={handleMouseMove}
+            style={{
+                '--mouse-x': `${glowPos.x}%`,
+                '--mouse-y': `${glowPos.y}%`
+            }}
+        >
             <div className="login-content-wrapper animate-fade-in">
                 <div className="informative-panel">
                     <div className="status-pill animate-pulse">
@@ -92,21 +96,22 @@ export default function Login({ onLoginComplete }) {
                     <h2 className="hero-title">Decarbonizing <br /><span className="gradient-text">Global Logistics</span></h2>
                     <p className="hero-subtitle">
                         The world's first AI-driven orchestration protocol for sustainable enterprise supply chains.
-                        {stats.tripsCount > 0 ? " You've already made an impact." : " Join the protocol and minimize your footprint."}
                     </p>
 
-                    <div className="stats-grid">
-                        <div className="stat-card">
-                            <span className="stat-value">{stats.carbonSaved}kg</span>
-                            <span className="stat-label">Total CO2 Saved</span>
+                    <div className="protocol-terminal">
+                        <div className="terminal-header">
+                            <span className="terminal-dot red"></span>
+                            <span className="terminal-dot yellow"></span>
+                            <span className="terminal-dot green"></span>
+                            <span className="terminal-title">NEXUS_FEED.sh</span>
                         </div>
-                        <div className="stat-card">
-                            <span className="stat-value">{stats.tripsCount}</span>
-                            <span className="stat-label">Verified Trips</span>
-                        </div>
-                        <div className="stat-card">
-                            <span className="stat-value">{stats.efficiency > 0 ? stats.efficiency + '%' : 'READY'}</span>
-                            <span className="stat-label">Fleet Efficiency</span>
+                        <div className="terminal-body" ref={terminalRef}>
+                            {logs.map((log, i) => (
+                                <div key={i} className="log-entry">
+                                    <span className="log-prompt">$</span> {log}
+                                </div>
+                            ))}
+                            <div className="log-cursor">_</div>
                         </div>
                     </div>
 
