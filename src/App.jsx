@@ -20,6 +20,7 @@ import GenAIExplainer from './components/GenAIExplainer';
 
 import AnalyticsDashboard from './components/AnalyticsDashboard';
 import FleetManager from './components/FleetManager';
+import { SAMPLE_FLEET, SAMPLE_TRIPS } from './utils/sampleData';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -36,11 +37,11 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('map'); // 'map', 'analytics', or 'fleet'
   const [fleet, setFleet] = useState(() => {
     const saved = localStorage.getItem('ecoroute_fleet');
-    return saved ? JSON.parse(saved) : [];
+    return saved ? JSON.parse(saved) : SAMPLE_FLEET;
   });
   const [trips, setTrips] = useState(() => {
     const saved = localStorage.getItem('ecoroute_trips');
-    return saved ? JSON.parse(saved) : [];
+    return (saved && JSON.parse(saved).length > 0) ? JSON.parse(saved) : SAMPLE_TRIPS;
   });
 
   const [routes, setRoutes] = useState([]);
