@@ -21,6 +21,8 @@ import GenAIExplainer from './components/GenAIExplainer';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
 import FleetManager from './components/FleetManager';
 import { SAMPLE_FLEET, SAMPLE_TRIPS } from './utils/sampleData';
+import GlobalIntelligenceBar from './components/GlobalIntelligenceBar';
+import IntelligenceOverlay from './components/IntelligenceOverlay';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -305,39 +307,49 @@ export default function App() {
   }
 
   return (
-    <div className="app">
-      <div className="nav-tabs">
-        <button
-          className={`nav-btn ${activeTab === 'map' ? 'active' : ''}`}
-          onClick={() => setActiveTab('map')}
-        >
-          📍 Optimizer
-        </button>
-        <button
-          className={`nav-btn ${activeTab === 'fleet' ? 'active' : ''}`}
-          onClick={() => setActiveTab('fleet')}
-        >
-          🚛 Fleet
-        </button>
-        <button
-          className={`nav-btn ${activeTab === 'analytics' ? 'active' : ''}`}
-          onClick={() => setActiveTab('analytics')}
-        >
-          📊 ESG Analytics
-        </button>
-      </div>
+    <div className="app-root">
+      <GlobalIntelligenceBar trips={trips} />
 
-      <aside className="sidebar">
-        <SearchPanel
-          onSearch={handleSearch}
-          loading={loading}
-          fleet={fleet}
-          onLogout={handleLogout}
-        />
+      <div className="app">
+        <div className="nav-tabs">
+          <div className="nav-brand">
+            <span className="brand-icon">🌱</span>
+            <span className="brand-name">EcoRoute</span>
+          </div>
+          <div className="nav-links">
+            <button
+              className={`nav-btn ${activeTab === 'map' ? 'active' : ''}`}
+              onClick={() => setActiveTab('map')}
+            >
+              📍 Optimizer
+            </button>
+            <button
+              className={`nav-btn ${activeTab === 'fleet' ? 'active' : ''}`}
+              onClick={() => setActiveTab('fleet')}
+            >
+              🚛 Fleet
+            </button>
+            <button
+              className={`nav-btn ${activeTab === 'analytics' ? 'active' : ''}`}
+              onClick={() => setActiveTab('analytics')}
+            >
+              📊 ESG Analytics
+            </button>
+          </div>
+          <button className="logout-nav-btn" onClick={handleLogout}>LOGOUT</button>
+        </div>
 
-        {error && <div className="error-box">⚠️ {error}</div>}
+        <aside className="sidebar">
+          <SearchPanel
+            onSearch={handleSearch}
+            loading={loading}
+            fleet={fleet}
+            onLogout={handleLogout}
+          />
 
-        {/* NEXUS Orchestration - Temporarily Removed
+          {error && <div className="error-box">⚠️ {error}</div>}
+
+          {/* NEXUS Orchestration - Temporarily Removed
         <NEXUSOrchestrator
           handovers={handovers}
           onSync={(h) => alert(`🧬 NEXUS LINK ESTABLISHED: Payload synchronized for ${h.hubLocation} Hub.`)}
@@ -345,8 +357,8 @@ export default function App() {
         />
         */}
 
-        {/* Development/Demo Assist */}
-        {/* NEXUS Demo Trigger - Temporarily Removed
+          {/* Development/Demo Assist */}
+          {/* NEXUS Demo Trigger - Temporarily Removed
         {handovers.length === 0 && !loading && (
           <button
             onClick={() => setHandovers([{
@@ -379,48 +391,48 @@ export default function App() {
         )}
         */}
 
-        {/* Gen-AI Route Explainer */}
-        {routes.length > 0 && currentSearchData && (
-          <GenAIExplainer
-            routes={routes}
-            vehicleType={currentSearchData.vehicleType || 'truck'}
-            payload={currentSearchData?.payload}
-            originName={currentSearchData.originName}
-            destinationName={currentSearchData.destinationName}
-          />
-        )}
+          {/* Gen-AI Route Explainer */}
+          {routes.length > 0 && currentSearchData && (
+            <GenAIExplainer
+              routes={routes}
+              vehicleType={currentSearchData.vehicleType || 'truck'}
+              payload={currentSearchData?.payload}
+              originName={currentSearchData.originName}
+              destinationName={currentSearchData.destinationName}
+            />
+          )}
 
-        {mergePotentials.length > 0 && (
-          <div className="merge-alert-box glass">
-            <div className="merge-alert-header">
-              <span>🤝</span> Co-loading Opportunity Found!
-            </div>
-            <p className="merge-alert-desc">
-              A trip on this route already has space. Merge to save 100% emissions for this leg.
-            </p>
-            {mergePotentials.map(tp => (
-              <div key={tp.id} className="merge-item">
-                <div className="merge-item-info">
-                  <strong>{tp.summary}</strong>
-                  <span>Current Load: {tp.payload}T</span>
-                </div>
-                <button className="merge-action-btn" onClick={() => mergeTrip(tp.id)}>
-                  Smart Merge
-                </button>
+          {mergePotentials.length > 0 && (
+            <div className="merge-alert-box glass">
+              <div className="merge-alert-header">
+                <span>🤝</span> Co-loading Opportunity Found!
               </div>
-            ))}
-          </div>
-        )}
+              <p className="merge-alert-desc">
+                A trip on this route already has space. Merge to save 100% emissions for this leg.
+              </p>
+              {mergePotentials.map(tp => (
+                <div key={tp.id} className="merge-item">
+                  <div className="merge-item-info">
+                    <strong>{tp.summary}</strong>
+                    <span>Current Load: {tp.payload}T</span>
+                  </div>
+                  <button className="merge-action-btn" onClick={() => mergeTrip(tp.id)}>
+                    Smart Merge
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
-        {searched && !loading && routes.length === 0 && !error && (
-          <div className="empty-state">No routes found. Try different locations.</div>
-        )}
+          {searched && !loading && routes.length === 0 && !error && (
+            <div className="empty-state">No routes found. Try different locations.</div>
+          )}
 
-        {routes.length > 0 && (
-          <div className="results-section">
-            {winner && (
-              <div className="winner-banner">
-                {/* Optimal Time Window - Temporarily Removed
+          {routes.length > 0 && (
+            <div className="results-section">
+              {winner && (
+                <div className="winner-banner">
+                  {/* Optimal Time Window - Temporarily Removed
                 <DispatchOptimizer
                   baseFuel={winner.metrics.fuelL || winner.metrics.kWh}
                   fuelType={winner.metrics.fuelType}
@@ -429,67 +441,69 @@ export default function App() {
                 />
                 */}
 
-                <div className="section-title">🚀 Optimized Routes</div>
+                  <div className="section-title">🚀 Optimized Routes</div>
 
-                <div className="winner-stats">
-                  <span>💨 {winner.metrics.co2Kg} kg CO₂</span>
-                  <span>💸 ₹{winner.metrics.cost}</span>
-                  <button onClick={() => recordTrip(winner)} className="record-btn">Confirm Trip</button>
+                  <div className="winner-stats">
+                    <span>💨 {winner.metrics.co2Kg} kg CO₂</span>
+                    <span>💸 ₹{winner.metrics.cost}</span>
+                    <button onClick={() => recordTrip(winner)} className="record-btn">Confirm Trip</button>
+                  </div>
                 </div>
+              )}
+
+              <PollutionChart routes={routes} />
+              <div className="routes-list">
+                {routes.map((route) => (
+                  <div key={route.id} style={{ position: 'relative' }}>
+                    <RouteCard
+                      route={route}
+                      isSelected={route.id === selectedRoute}
+                      onClick={() => setSelectedRoute(route.id)}
+                    />
+                    {route.id === selectedRoute && (
+                      <button
+                        className="mini-record-btn"
+                        onClick={() => recordTrip(route)}
+                      >
+                        Log Trip
+                      </button>
+                    )}
+                  </div>
+                ))}
               </div>
-            )}
-
-            <PollutionChart routes={routes} />
-            <div className="routes-list">
-              {routes.map((route) => (
-                <div key={route.id} style={{ position: 'relative' }}>
-                  <RouteCard
-                    route={route}
-                    isSelected={route.id === selectedRoute}
-                    onClick={() => setSelectedRoute(route.id)}
-                  />
-                  {route.id === selectedRoute && (
-                    <button
-                      className="mini-record-btn"
-                      onClick={() => recordTrip(route)}
-                    >
-                      Log Trip
-                    </button>
-                  )}
-                </div>
-              ))}
             </div>
-          </div>
-        )}
-      </aside>
+          )}
+        </aside>
 
-      <main className="map-area">
-        {activeTab === 'map' ? (
-          <>
-            <MapView
-              routes={routes}
-              selectedRoute={selectedRoute}
-              origin={originPos}
-              destination={destPos}
-            />
-            <EcoMathCard />
-          </>
-        ) : activeTab === 'fleet' ? (
-          <FleetManager fleet={fleet} onUpdateFleet={setFleet} />
-        ) : (
-          <AnalyticsDashboard trips={trips} onDeleteTrip={deleteTrip} />
-        )}
-      </main>
+        <main className="map-area">
+          {activeTab === 'map' ? (
+            <>
+              <MapView
+                routes={routes}
+                selectedRoute={selectedRoute}
+                origin={originPos}
+                destination={destPos}
+              />
+              <IntelligenceOverlay />
+              <EcoMathCard />
+            </>
+          ) : activeTab === 'fleet' ? (
+            <FleetManager fleet={fleet} onUpdateFleet={setFleet} />
+          ) : (
+            <AnalyticsDashboard trips={trips} onDeleteTrip={deleteTrip} />
+          )}
+        </main>
 
-      {/* Backhaul Return Trip Optimizer Modal */}
-      {backhaulTrip && (
-        <BackhaulAlert
-          trip={backhaulTrip}
-          vehicleName={backhaulTrip.vehicleName}
-          onAccept={handleBackhaulAccept}
-          onDismiss={() => setBackhaulTrip(null)}
-        />
-      )}
+        {/* Backhaul Return Trip Optimizer Modal */}
+        {backhaulTrip && (
+          <BackhaulAlert
+            trip={backhaulTrip}
+            vehicleName={backhaulTrip.vehicleName}
+            onAccept={handleBackhaulAccept}
+            onDismiss={() => setBackhaulTrip(null)}
+          />
+        )}
+      </div>
     </div>
   );
 }

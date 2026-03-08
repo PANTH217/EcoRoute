@@ -1,0 +1,93 @@
+.intelligence-overlay {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: rgba(13, 13, 26, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 16px;
+    width: 260px;
+    z-index: 900;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    animation: slideInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.overlay-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 12px;
+}
+
+.overlay-icon {
+    font-size: 1.5rem;
+}
+
+.overlay-title-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.overlay-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #4fd1c5;
+    letter-spacing: 1.5px;
+}
+
+.overlay-sub {
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 500;
+}
+
+.overlay-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.overlay-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 10px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.overlay-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #4fd1c5;
+    transform: translateY(-2px);
+}
+
+.overlay-btn span {
+    font-size: 1.1rem;
+}
+
+.overlay-btn label {
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+}

@@ -1,0 +1,79 @@
+.global-intelligence-bar {
+    height: 50px;
+    background: rgba(13, 13, 26, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 30px;
+    position: relative;
+    z-index: 1000;
+}
+
+.intelligence-node {
+    display: flex;
+    flex-direction: column;
+}
+
+.node-label {
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.node-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.node-value.green {
+    color: #00e676;
+}
+
+.node-value.blue {
+    color: #4fd1c5;
+}
+
+.trend-arrow {
+    font-size: 0.8rem;
+    margin-left: 4px;
+}
+
+.intelligence-separator {
+    width: 1px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.intelligence-status {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.status-dot.green {
+    background: #00e676;
+    box-shadow: 0 0 8px #00e676;
+}
+
+.status-text {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.5px;
+}
