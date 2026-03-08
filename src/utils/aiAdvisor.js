@@ -21,7 +21,7 @@ let currentKeyIndex = 0;
 function getNextKey() {
     const key = API_KEYS[currentKeyIndex];
     currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
-    return key;
+    return key?.trim();
 }
 
 /**
@@ -123,7 +123,7 @@ export async function askLorriAI(query, context) {
 
     try {
         const genAI = new GoogleGenerativeAI(key);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
         const prompt = `
       You are Lorri.AI, a world-class logistics and sustainability advisor.
@@ -194,7 +194,7 @@ export async function generateRouteAnalysis(routes, vehicleType, payload, origin
 
     try {
         const genAI = new GoogleGenerativeAI(key);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
         const result = await model.generateContent(dataContext);
         const responseText = result.response.text().replace(/\*/g, ''); // Strip asterisks
         return responseText;
