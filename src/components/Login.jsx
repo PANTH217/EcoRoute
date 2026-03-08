@@ -4,13 +4,13 @@ import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPass
 import './Login.css';
 
 const PROTOCOL_MESSAGES = [
-    "Initializing NEXUS Core orchestration...",
+    "Initializing NEXUS Core intelligence...",
     "Scanning Pune-Mumbai logistics corridor...",
     "Analyzing fleet emissions (342.5kg CO2 detected)...",
     "Optimizing payload for NEXUS-Alpha...",
     "Strategic alignment: +18% fuel efficiency identified.",
     "Lorri.AI: Recalibrating dynamic ESG layers...",
-    "Syncing with global carbon offset protocol...",
+    "Syncing with global carbon offset metrics...",
     "System status: NEXUS CORE ACTIVE & STABLE."
 ];
 
@@ -95,7 +95,7 @@ export default function Login({ onLoginComplete }) {
 
                     <h2 className="hero-title">Decarbonizing <br /><span className="gradient-text">Global Logistics</span></h2>
                     <p className="hero-subtitle">
-                        The world's first AI-driven orchestration protocol for sustainable enterprise supply chains.
+                        Harnessing AI-powered intelligence and deep analytics to optimize logistics for a greener, more efficient future.
                     </p>
 
                     <div className="protocol-terminal">
